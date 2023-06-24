@@ -1,0 +1,101 @@
+@use "node_modules/myshades" with (
+	$palette: (
+		neutral: rgb(56, 56, 153),
+		danger: rgb(142, 56, 56),
+		success: rgb(68, 156, 55)
+	)
+);
+
+:root {
+	--z-index-nav: 10;
+
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+		Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+	color: var(--on-color-50);
+}
+
+*,
+*::after,
+*::before {
+	padding: 0;
+	margin: 0;
+
+	box-sizing: border-box;
+
+	transition: none cubic-bezier(0.1, 1.1, 0.25, 1) 600ms;
+	color: inherit;
+}
+
+*::selection {
+	background-color: var(--color-600);
+	color: var(--on-color-600);
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+.fa-button,
+button {
+	cursor: pointer;
+	border: none;
+	border-radius: 2rem;
+	padding: 0.5rem 1.25rem;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+
+	background-color: var(--color-200);
+	color: var(--on-color-200);
+
+	opacity: 0.8;
+
+	transition-property: opacity, scale, filter;
+
+	&:hover {
+		opacity: 1;
+	}
+
+	&:active {
+		opacity: 0.5;
+		scale: 0.99;
+	}
+
+	&[data-disabled],
+	&:disabled {
+		pointer-events: none;
+		opacity: 0.25;
+	}
+}
+
+.fa.fa-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	$size: 2rem;
+
+	width: $size;
+	height: $size;
+
+	padding: 0;
+	border-radius: 50%;
+}
+
+a {
+	cursor: pointer;
+
+	text-decoration: none;
+
+	&[data-cover] {
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+		}
+	}
+}

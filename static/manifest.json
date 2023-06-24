@@ -1,0 +1,6 @@
+{
+	"name": "My Dico",
+	"short_name": "MyDico",
+	"theme_color": "#1f1f47",
+	"display": "standalone"
+}
