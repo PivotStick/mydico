@@ -61,9 +61,15 @@
 		grid-template-rows: calc(72px + env(safe-area-inset-top)) 1fr;
 		height: 100vh;
 
-		// @media only screen and (hover: none) and (pointer: coarse) {
-		// 	height: -webkit-fill-available;
-		// }
+		@media only screen and (hover: none) and (pointer: coarse) {
+			height: -moz-available;
+			height: -webkit-fill-available;
+			height: fill-available;
+		}
+
+		@media all and (display-mode: standalone) {
+			height: 100vh;
+		}
 	}
 
 	nav {
@@ -141,8 +147,6 @@
 		position: relative;
 		overflow: auto;
 
-		padding-bottom: env(safe-area-inset-bottom);
-
-		--main-padding: 1rem;
+		--main-padding: 1.5rem;
 	}
 </style>

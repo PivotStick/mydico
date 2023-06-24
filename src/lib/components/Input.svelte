@@ -13,7 +13,7 @@
 	{#if textarea}
 		<textarea cols="30" rows="10" bind:value {placeholder} />
 	{:else}
-		<input type="text" bind:value {placeholder} />
+		<input type="text" bind:value {...$$restProps} {placeholder} />
 	{/if}
 </label>
 
