@@ -14,7 +14,7 @@ const borders = (...sides) => ({
  *
  * @param {DataValues["leds"][number]} led
  */
-const makeLed = (led) => {
+const makeLed = (led, limit = 0) => {
 	const items = led.items.length ? led.items : [{ name: "pas de film annonce" }];
 
 	return [
@@ -59,7 +59,7 @@ const makeLed = (led) => {
 				s: borders("bottom", "right")
 			}
 		],
-		...Array(5)
+		...Array(limit)
 			.fill(undefined)
 			.map((_, index, a) => {
 				/**
@@ -96,11 +96,11 @@ const makeLed = (led) => {
  * @param {DataValues} data
  */
 export const makeLeds = (wb, data) => {
-	const sheet = utils.aoa_to_sheet(makeLed(data.leds[0]));
+	const sheet = utils.aoa_to_sheet(makeLed(data.leds[0], data.leds[0].items.length));
 
-	utils.sheet_add_aoa(sheet, makeLed(data.leds[1]), { origin: "E1" });
-	utils.sheet_add_aoa(sheet, makeLed(data.leds[2]), { origin: "E10" });
-	utils.sheet_add_aoa(sheet, makeLed(data.leds[3]), { origin: "E19" });
+	utils.sheet_add_aoa(sheet, makeLed(data.leds[1], 5), { origin: "E1" });
+	utils.sheet_add_aoa(sheet, makeLed(data.leds[2], 5), { origin: "E10" });
+	utils.sheet_add_aoa(sheet, makeLed(data.leds[3], 5), { origin: "E19" });
 
 	// @ts-ignore
 	sheet["!cols"] = [
