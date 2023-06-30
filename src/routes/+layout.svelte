@@ -19,7 +19,7 @@
 		},
 		{
 			icon: "fa-tv",
-			href: "/led"
+			href: "/leds"
 		},
 		{
 			icon: "fa-comment",
@@ -148,5 +148,6 @@
 		overflow: auto;
 
 		--main-padding: 1.5rem;
+		--main-padding-bottom: calc(var(--main-padding) + env(safe-area-inset-bottom));
 	}
 </style>

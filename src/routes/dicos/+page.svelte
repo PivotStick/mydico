@@ -1,5 +1,4 @@
 <script>
-	import { goto } from "$app/navigation";
 	import Input from "$lib/components/Input.svelte";
 	import { data } from "$lib/stores/data";
 	import { v4 } from "uuid";
@@ -13,7 +12,7 @@
 		if (!name) return;
 
 		dicos.push({
-			_id: v4(),
+			id: v4(),
 			name,
 			items: []
 		});
@@ -31,21 +30,20 @@
 			placeholder="example: 'Dico de juin 2023...'"
 			bind:value={newName}
 		/>
-		<button type="submit"><i class="fa fa-plus" /></button>
+		<button class="fa fa-plus fa-button" type="submit" />
 	</form>
 
 	{#if $data.values.dicos}
 		<ul class="dicos">
-			{#each $data.values.dicos as dico (dico._id)}
+			{#each $data.values.dicos as dico (dico.id)}
 				<li>
 					<i
 						class="fa fa-trash fa-button"
 						on:click={() => {
-							// @ts-ignore
-							$data.values.dicos = $data.values.dicos.filter((d) => d._id !== dico._id);
+							$data.values.dicos = $data.values.dicos.filter((d) => d.id !== dico.id);
 						}}
 					/>
-					<a href="/dicos/{dico._id}" data-cover>{dico.name}</a>
+					<a href="/dicos/{dico.id}" data-cover>{dico.name}</a>
 					<div class="items-count"><i class="fa fa-tv" /> {dico.items.length}</div>
 				</li>
 			{/each}
@@ -60,11 +58,7 @@
 		form {
 			display: flex;
 			align-items: center;
-			gap: 0.5rem;
-
-			button {
-				padding: 0.5rem;
-			}
+			gap: var(--main-padding);
 		}
 
 		.dicos {

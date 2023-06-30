@@ -1,12 +1,22 @@
 import { get, writable } from "svelte/store";
 
 const key = "____DATAS________";
+/**
+ * @type {{
+ * 	syncing: boolean;
+ * 	values: DataValues;
+ * }}
+ */
 const defaultValues = {
 	syncing: false,
+	// @ts-ignore
 	values: {}
 };
 
 const makeData = () => {
+	/**
+	 * @type {import("svelte/store").Writable<typeof defaultValues>}
+	 */
 	const { subscribe, update, set } = writable(
 		JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValues))
 	);

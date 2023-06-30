@@ -17,7 +17,7 @@
 		if (!name) return;
 
 		$data.values.dicos[index].items.push({
-			_id: v4(),
+			id: v4(),
 			name,
 			type: "pub"
 		});
@@ -27,7 +27,6 @@
 		query = "";
 	};
 
-	// @ts-ignore
 	$: filtered = $data.values.dicos[index].items.filter((item) =>
 		item.name.toLowerCase().includes(query.toLowerCase())
 	);
@@ -47,7 +46,7 @@
 			<div style="width: 100%">Type</div>
 			<i class="fa fa-button" data-disabled />
 		</li>
-		{#each filtered.slice(0, limit) as item (item._id)}
+		{#each filtered.slice(0, limit) as item (item.id)}
 			<li>
 				<Input bind:value={item.name} />
 				<Input bind:value={item.type} />
@@ -55,8 +54,7 @@
 					class="fa fa-trash fa-button danger"
 					on:click={() => {
 						$data.values.dicos[index].items = $data.values.dicos[index].items.filter(
-							// @ts-ignore
-							(i) => i._id !== item._id
+							(i) => i.id !== item.id
 						);
 					}}
 				/>

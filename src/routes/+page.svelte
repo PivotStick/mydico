@@ -1,6 +1,12 @@
 <script>
+	import AsyncButton from "$lib/components/AsyncButton.svelte";
 	import Input from "$lib/components/Input.svelte";
 	import { data } from "$lib/stores/data";
+	import { generate } from "$lib/xslx/generate";
+
+	const generateXLSX = () => {
+		generate($data.values);
+	};
 </script>
 
 <div class="page">
@@ -10,17 +16,17 @@
 	<Input label="Ville" bind:value={$data.values.city} />
 	<Input label="Circuit" bind:value={$data.values.circuit} />
 
-	<button disabled={$data.syncing} on:click={data.save}>
+	<AsyncButton async={data.save} class="success">
 		<i class="fa fa-save" />
 		Sauvegarder
-	</button>
+	</AsyncButton>
 
-	<button disabled={$data.syncing} on:click={data.sync}>
+	<AsyncButton async={data.sync}>
 		<i class="fa fa-sync" />
 		Synchroniser
-	</button>
+	</AsyncButton>
 
-	<button>
+	<button on:click={generateXLSX}>
 		<i class="fa fa-download" />
 		Télécharger
 	</button>
@@ -29,7 +35,7 @@
 <style lang="scss">
 	.page {
 		padding: var(--main-padding);
-		height: 100%;
+		padding-bottom: var(--main-padding-bottom);
 
 		display: flex;
 		flex-direction: column;

@@ -5,8 +5,7 @@
 	import NotFound from "./NotFound.svelte";
 	import DicoItems from "./DicoItems.svelte";
 
-	// @ts-ignore
-	$: index = $data.values.dicos?.findIndex((d) => d._id === $page.params.dicoId);
+	$: index = $data.values.dicos?.findIndex((d) => d.id === $page.params.dicoId);
 </script>
 
 <div class="page">

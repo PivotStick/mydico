@@ -53,6 +53,7 @@ button {
 	color: var(--on-color-200);
 
 	opacity: 0.8;
+	width: 100%;
 
 	transition-property: opacity, scale, filter;
 
@@ -84,6 +85,8 @@ button {
 
 	padding: 0;
 	border-radius: 50%;
+
+	flex-shrink: 0;
 }
 
 a {
@@ -98,4 +101,8 @@ a {
 			inset: 0;
 		}
 	}
+}
+
+.fa-load {
+	animation: fa-spin 800ms ease infinite;
 }

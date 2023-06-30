@@ -1,20 +1,38 @@
 <script>
+	import { api } from "$lib/api";
+	import AsyncButton from "$lib/components/AsyncButton.svelte";
 	import Input from "$lib/components/Input.svelte";
 	import { data } from "$lib/stores/data";
+
+	const sync = async () => {
+		$data.values.leds = await api.get("/data/leds");
+	};
+
+	const save = () => api.put("/data/leds", $data.values.leds);
 </script>
 
-{#if $data.values.leds}
+<div class="page">
+	<div class="actions">
+		<AsyncButton async={sync}>
+			<i class="fa fa-sync" /> Synchroniser
+		</AsyncButton>
+		<AsyncButton async={save} class="success">
+			<i class="fa fa-save" /> Sauvegarder
+		</AsyncButton>
+	</div>
+
 	<ul>
-		{#each $data.values.leds as led (led._id)}
+		{#each $data.values.leds as led (led.id)}
 			<li>
 				<input class="name" bind:value={led.name} />
+				<input class="subtitle" bind:value={led.subtitle} />
 				<div class="numbers">
 					<Input label="Nombre dans le hall" bind:value={led.countInHall} />
 					<Input label="Nombre dans les couloirs" bind:value={led.countInHallaway} />
 					<Input label="Nombre en extérieur" bind:value={led.countOutside} />
 				</div>
 				<button style="position: relative;">
-					<a href="/led/{led._id}" data-cover>
+					<a href="/leds/{led.id}" data-cover>
 						{#if led.items.length}
 							{led.items.length} film{led.items.length > 1 ? "s" : ""}
 							<i class="fa fa-film" />
@@ -26,15 +44,22 @@
 			</li>
 		{/each}
 	</ul>
-{:else}
-	<p>Tu n'as pas de leds...</p>
-	<button on:click={data.sync}><i class="fa fa-sync" /> Synchroniser</button>
-{/if}
+</div>
 
 <style lang="scss">
-	ul {
+	.page {
 		padding: var(--main-padding);
+		padding-bottom: calc(var(--main-padding) + env(safe-area-inset-bottom));
 
+		display: grid;
+
+		.actions {
+			display: flex;
+			gap: 1rem;
+		}
+	}
+
+	ul {
 		display: flex;
 		flex-direction: column;
 
@@ -42,16 +67,24 @@
 			display: grid;
 			gap: 1rem;
 
-			&:not(:last-child) {
-				border-bottom: 1px solid var(--color-200);
-				padding-bottom: 3rem;
-				margin-bottom: 3rem;
+			border-top: 1px solid var(--color-200);
+			padding-top: 3rem;
+			margin-top: 3rem;
+
+			&:first-child {
+				margin-top: var(--main-padding);
 			}
 
 			.name {
 				font-size: 2rem;
 				font-weight: 700;
 				width: 100%;
+				border: none;
+			}
+
+			.subtitle {
+				width: 100%;
+				font-style: italic;
 				border: none;
 			}
 

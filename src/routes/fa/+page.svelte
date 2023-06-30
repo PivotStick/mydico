@@ -4,6 +4,11 @@
 	import Input from "$lib/components/Input.svelte";
 	import { data } from "$lib/stores/data";
 	import { v4 } from "uuid";
+	import AsyncButton from "$lib/components/AsyncButton.svelte";
+	import { api } from "$lib/api";
+	import { slide } from "svelte/transition";
+
+	const types = ["2D"];
 
 	const add = () => {
 		const fa = $data.values.fa || [];
@@ -15,66 +20,90 @@
 			suppressMilliseconds: true
 		};
 
-		fa.push({
+		fa.unshift({
 			id: v4(),
 			name: "",
 			start: start.toISO(conf),
 			end: start.plus({ minutes: 25 }).toISOTime(conf),
+			type: types[0],
 			room: 0,
 			notes: []
 		});
 
 		$data.values.fa = fa;
 	};
+
+	/**
+	 * @param {DataValues["fa"][number]} fa
+	 */
+	const save = (fa) => api.put(`/data/fa/${fa.id}`, fa);
 </script>
 
 <div class="page">
+	<div class="actions">
+		<button on:click={add}>
+			<i class="fa fa-plus" />
+			Ajouter un film
+		</button>
+	</div>
+
 	<ul class="films">
 		{#each $data.values.fa || [] as fa (fa.id)}
-			<li class="films__film">
+			<li class="films__film" transition:slide|local>
 				<!-- <pre style="grid-column: 1 / -1;">{JSON.stringify(fa, null, 2)}</pre> -->
-				<Input label="Nom du film" bind:value={fa.name} />
+				<div style="grid-column: 1 / -1;">
+					<Input label="Nom du film" bind:value={fa.name} />
+				</div>
+				<Input label="Type" select={types} bind:value={fa.type} />
 				<Input label="N° de salle" bind:value={fa.room} type="number" inputmode="numeric" />
 				<Input label="Commence à" bind:value={fa.start} type="datetime-local" />
 				<Input label="Sorti à" bind:value={fa.end} type="time" />
 				<button on:click={() => goto(`/fa/${fa.id}`)}>
-					<i class="fa fa-pen" />
+					<i class="fa fa-{fa.notes.length ? 'eye' : 'pen'}" />
 				</button>
 				<button
 					on:click={() => {
-						// @ts-ignore
-						$data.values.fa = $data.values.fa.filter((f) => f !== fa);
+						if (confirm(`Supprimer ${fa.name} ?`)) {
+							$data.values.fa = $data.values.fa.filter((f) => f !== fa);
+						}
 					}}
 					class="danger"
 				>
 					<i class="fa fa-trash" />
 				</button>
+				<AsyncButton async={() => save(fa)} class="success" style="grid-column: 1 / -1;">
+					<i class="fa fa-save" />
+					Sauvegarder
+				</AsyncButton>
 			</li>
 		{/each}
-		<li>
-			<button on:click={add} class="fa fa-plus fa-button" />
-		</li>
 	</ul>
 </div>
 
 <style lang="scss">
 	.page {
 		padding: var(--main-padding);
+		padding-bottom: var(--main-padding-bottom);
+	}
+
+	.actions {
+		display: flex;
+		gap: 1rem;
 	}
 
 	.films {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
 
 		&__film {
-			padding: 0.5rem;
-			background-color: var(--color-50);
-			border-radius: 0.75rem;
-
 			display: grid;
 			gap: 0.5rem;
 			grid-template-columns: 1fr 1fr;
+
+			border-top: 1px solid var(--color-100);
+			box-shadow: 0 -0.5rem 1rem -1.25rem var(--color-600);
+			padding-top: 2rem;
+			margin-top: 2rem;
 		}
 	}
 </style>
