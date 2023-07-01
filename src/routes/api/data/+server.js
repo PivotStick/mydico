@@ -59,7 +59,10 @@ export const GET = async () => {
 				items: []
 			}
 		],
-		comments: "",
+		comments: {
+			display: "",
+			fa: ""
+		},
 		fa: []
 	};
 

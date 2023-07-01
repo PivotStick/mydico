@@ -33,7 +33,10 @@ type DataValues = {
 			name: string;
 		}[];
 	}[];
-	comments: string;
+	comments: {
+		display: string;
+		fa: string;
+	};
 	fa: {
 		id: string;
 		name: string;

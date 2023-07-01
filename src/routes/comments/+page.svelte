@@ -12,13 +12,17 @@
 </script>
 
 <div class="page">
-	<h1>Remarques</h1>
+	<h1>Remarques d'affichage</h1>
 
 	<Input
 		textarea
 		placeholder="example : 'Un écran qui s'étaignait tout seul' etc..."
-		bind:value={$data.values.comments}
+		bind:value={$data.values.comments.display}
 	/>
+
+	<h1>Remarques films annonces</h1>
+
+	<Input textarea bind:value={$data.values.comments.fa} />
 
 	<div class="actions">
 		<AsyncButton async={sync}>
