@@ -1,6 +1,7 @@
 <script>
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
+	import QuickSelect from "$lib/components/QuickSelect.svelte";
 	import { data } from "$lib/stores/data";
 	import { DateTime } from "luxon";
 	import { tick } from "svelte";
@@ -102,20 +103,22 @@
 	{/each}
 	<li class="notes__inputs">
 		<input type="text" bind:value={payload.name} on:keydown={keydown} />
-		<select bind:value={payload.type}>
-			{#each types as option}
-				<option>{option}</option>
-			{/each}
-		</select>
-		<select bind:value={payload.mode}>
-			{#each modes as mode}
-				{#if mode}
-					<option value={mode}>{mode.name}</option>
-				{:else}
-					<option value={undefined}>normal</option>
-				{/if}
-			{/each}
-		</select>
+		<QuickSelect options={types} bind:selected={payload.type} --border-radius="0" />
+		<QuickSelect
+			options={modes.map((mode) =>
+				mode
+					? {
+							value: mode,
+							text: mode.name
+					  }
+					: {
+							value: undefined,
+							text: "normal"
+					  }
+			)}
+			bind:selected={payload.mode}
+			--border-radius="0"
+		/>
 	</li>
 </ul>
 
@@ -201,8 +204,8 @@
 
 		&__inputs {
 			display: flex;
+			border: 1px solid var(--color-200);
 
-			select,
 			input {
 				border: 1px solid var(--color-200);
 				padding: 1rem;
@@ -211,12 +214,6 @@
 
 				outline: 0px solid var(--color-50);
 				background-color: transparent;
-
-				border-left: none;
-
-				&:last-child {
-					border-right: none;
-				}
 
 				&:focus {
 					outline-width: 4px;

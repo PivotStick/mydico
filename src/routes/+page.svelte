@@ -41,4 +41,9 @@
 		flex-direction: column;
 		gap: 1rem;
 	}
+
+	pre {
+		white-space: pre-wrap;
+		word-break: break-all;
+	}
 </style>

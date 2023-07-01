@@ -1,3 +1,4 @@
+import { api } from "$lib/api";
 import { get, writable } from "svelte/store";
 
 const key = "____DATAS________";
@@ -13,13 +14,18 @@ const defaultValues = {
 	values: {}
 };
 
+const getInitialValue = () => {
+	const value = JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValues));
+	value.syncing = false;
+
+	return value;
+};
+
 const makeData = () => {
 	/**
 	 * @type {import("svelte/store").Writable<typeof defaultValues>}
 	 */
-	const { subscribe, update, set } = writable(
-		JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValues))
-	);
+	const { subscribe, update, set } = writable(getInitialValue());
 
 	const sync = async () => {
 		if (get({ subscribe }).syncing) {
@@ -31,7 +37,7 @@ const makeData = () => {
 			return v;
 		});
 
-		const values = await fetch("/api/data").then((res) => res.json());
+		const values = await api.get("/data");
 
 		update((v) => {
 			v.syncing = false;
@@ -51,11 +57,7 @@ const makeData = () => {
 			return v;
 		});
 
-		const values = await fetch("/api/data", {
-			method: "PUT",
-			headers: { "content-type": "application/json" },
-			body: JSON.stringify(current.values)
-		}).then((res) => res.json());
+		const values = await api.put("/data", current.values);
 
 		update((v) => {
 			v.syncing = false;

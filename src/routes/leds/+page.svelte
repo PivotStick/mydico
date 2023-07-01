@@ -27,9 +27,24 @@
 				<input class="name" bind:value={led.name} />
 				<input class="subtitle" bind:value={led.subtitle} />
 				<div class="numbers">
-					<Input label="Nombre dans le hall" bind:value={led.countInHall} />
-					<Input label="Nombre dans les couloirs" bind:value={led.countInHallaway} />
-					<Input label="Nombre en extérieur" bind:value={led.countOutside} />
+					<Input
+						bind:value={led.countInHall}
+						label="Nombre dans le hall"
+						type="number"
+						inputmode="numeric"
+					/>
+					<Input
+						bind:value={led.countInHallaway}
+						label="Nombre dans les couloirs"
+						type="number"
+						inputmode="numeric"
+					/>
+					<Input
+						bind:value={led.countOutside}
+						label="Nombre en extérieur"
+						type="number"
+						inputmode="numeric"
+					/>
 				</div>
 				<button style="position: relative;">
 					<a href="/leds/{led.id}" data-cover>

@@ -8,7 +8,7 @@
 
 	export let textarea = false;
 	/**
-	 * @type {string[]=}
+	 * @type {any[]=}
 	 */
 	export let select = undefined;
 </script>

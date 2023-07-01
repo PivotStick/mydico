@@ -9,6 +9,7 @@
 	import { slide } from "svelte/transition";
 
 	const types = ["2D"];
+	const rooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 	const add = () => {
 		const fa = $data.values.fa || [];
@@ -26,7 +27,7 @@
 			start: start.toISO(conf),
 			end: start.plus({ minutes: 25 }).toISOTime(conf),
 			type: types[0],
-			room: 0,
+			room: rooms[0],
 			notes: []
 		});
 
@@ -55,7 +56,7 @@
 					<Input label="Nom du film" bind:value={fa.name} />
 				</div>
 				<Input label="Type" select={types} bind:value={fa.type} />
-				<Input label="N° de salle" bind:value={fa.room} type="number" inputmode="numeric" />
+				<Input label="N° de salle" select={rooms} bind:value={fa.room} />
 				<Input label="Commence à" bind:value={fa.start} type="datetime-local" />
 				<Input label="Sorti à" bind:value={fa.end} type="time" />
 				<button on:click={() => goto(`/fa/${fa.id}`)}>
