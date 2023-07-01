@@ -21,5 +21,5 @@ export const generate = (values) => {
 	const name = values.cinemaName.toUpperCase();
 	const week = values.weekNumber.toUpperCase();
 
-	writeFile(wb, `${name} SEMAINE ${week}.xlsx`.replace(/\s+/g, "_"));
+	writeFile(wb, `${name} SEMAINE ${week}.xlsx`);
 };
