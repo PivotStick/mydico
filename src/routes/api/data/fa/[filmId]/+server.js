@@ -1,6 +1,16 @@
 import { db } from "$lib/db.secret.js";
 import { error, json } from "@sveltejs/kit";
 
+export const GET = async ({ params }) => {
+	const dico = await db.dicos.findOne({});
+
+	if (!dico) throw error(404, "No dico found");
+
+	const fa = dico.fa.find((f) => f.id === params.filmId);
+
+	return json(fa);
+};
+
 export const PUT = async ({ request, params }) => {
 	const body = await request.json();
 	const dico = await db.dicos.findOne({});

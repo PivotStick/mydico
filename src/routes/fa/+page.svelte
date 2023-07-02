@@ -38,6 +38,27 @@
 	 * @param {DataValues["fa"][number]} fa
 	 */
 	const save = (fa) => api.put(`/data/fa/${fa.id}`, fa);
+
+	const getMissingFilms = async () => {
+		/**
+		 * @type {DataValues["fa"]}
+		 */
+		const fas = await api.get("/data/fa");
+		const missingFilms = fas.filter((f) => !$data.values.fa.find((b) => b.id === f.id));
+
+		$data.values.fa.push(...missingFilms);
+		$data.values.fa = $data.values.fa;
+	};
+
+	/**
+	 * @param {DataValues["fa"][number]["id"]} filmId
+	 */
+	const sync = async (filmId) => {
+		const fa = await api.get(`/data/fa/${filmId}`);
+		const index = $data.values.fa.findIndex((f) => f.id === filmId);
+
+		$data.values.fa[index] = fa;
+	};
 </script>
 
 <div class="page">
@@ -46,6 +67,10 @@
 			<i class="fa fa-plus" />
 			Ajouter un film
 		</button>
+		<AsyncButton async={getMissingFilms}>
+			<i class="fa fa-sync" />
+			Récupérer les films manquant
+		</AsyncButton>
 	</div>
 
 	<ul class="films">
@@ -76,6 +101,10 @@
 					<i class="fa fa-save" />
 					Sauvegarder
 				</AsyncButton>
+				<AsyncButton async={() => sync(fa.id)} style="grid-column: 1 / -1;">
+					<i class="fa fa-sync" />
+					Synchroniser
+				</AsyncButton>
 			</li>
 		{/each}
 	</ul>
@@ -88,7 +117,7 @@
 	}
 
 	.actions {
-		display: flex;
+		display: grid;
 		gap: 1rem;
 	}
 
