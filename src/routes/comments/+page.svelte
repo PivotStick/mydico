@@ -16,7 +16,7 @@
 
 	<Input
 		textarea
-		placeholder="example : 'Un écran qui s'étaignait tout seul' etc..."
+		placeholder="example : 'Un écran qui s'éteignait tout seul' etc..."
 		bind:value={$data.values.comments.display}
 	/>
 
