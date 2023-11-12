@@ -1,5 +1,6 @@
 <script>
 	import { page } from "$app/stores";
+	import Snacks from "$lib/components/Snacks.svelte";
 
 	import "../app.scss";
 	import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -35,6 +36,8 @@
 <svelte:head>
 	<title>My Dico</title>
 </svelte:head>
+
+<Snacks />
 
 <div class="layout">
 	<nav>

@@ -71,6 +71,9 @@ export const GET = async () => {
 	return json({ _id: result.insertedId, ...data });
 };
 
+/**
+ * @type {import("@sveltejs/kit").RequestHandler}
+ */
 export const PUT = async ({ request }) => {
 	const datas = await request.json();
 	const _id = datas._id;

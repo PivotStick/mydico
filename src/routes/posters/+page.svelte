@@ -1,6 +1,9 @@
 <script>
 	import { api } from "$lib/api";
 	import AsyncButton from "$lib/components/AsyncButton.svelte";
+	import DicoSearcher from "$lib/components/DicoSearcher.svelte";
+	import { snacks } from "$lib/components/Snacks.svelte";
+	import { searchDicoItem } from "$lib/functions/searchDicoItem";
 	import { data } from "$lib/stores/data";
 	import { tick } from "svelte";
 	import { v4 } from "uuid";
@@ -50,6 +53,13 @@
 	};
 
 	const save = () => api.put("/data/posters", $data.values.posters);
+
+	/**
+	 * @type {HTMLInputElement}
+	 */
+	let nameInput;
+
+	$: searchResults = searchDicoItem(payload.name, $data.values.dicos);
 </script>
 
 <div class="actions">
@@ -86,7 +96,9 @@
 		</li>
 	{/each}
 	<li class="posters__inputs">
-		<input type="text" bind:value={payload.name} on:keydown={keydown} />
+		<DicoSearcher bind:name={payload.name} input={nameInput} />
+
+		<input type="text" bind:this={nameInput} bind:value={payload.name} on:keydown={keydown} />
 		<select bind:value={payload.location}>
 			{#each locations as value}
 				<option>{value}</option>
@@ -102,6 +114,10 @@
 
 <style lang="scss">
 	.posters {
+		min-height: 50vh;
+		display: flex;
+		flex-direction: column;
+
 		&__poster {
 			display: flex;
 			align-items: center;
@@ -128,6 +144,8 @@
 
 		&__inputs {
 			display: flex;
+			position: relative;
+			margin-top: auto;
 
 			input,
 			select {

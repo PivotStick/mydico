@@ -6,6 +6,9 @@ export const GET = async () => {
 	return json(dico?.posters || []);
 };
 
+/**
+ * @type {import("./$types").RequestHandler}
+ */
 export const PUT = async ({ request }) => {
 	const posters = await request.json();
 	const result = await db.dicos.updateOne({}, { $set: { posters } });

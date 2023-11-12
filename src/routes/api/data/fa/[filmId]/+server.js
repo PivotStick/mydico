@@ -1,6 +1,9 @@
 import { db } from "$lib/db.secret.js";
 import { error, json } from "@sveltejs/kit";
 
+/**
+ * @type {import("./$types").RequestHandler}
+ */
 export const GET = async ({ params }) => {
 	const dico = await db.dicos.findOne({});
 
@@ -11,6 +14,9 @@ export const GET = async ({ params }) => {
 	return json(fa);
 };
 
+/**
+ * @type {import("./$types").RequestHandler}
+ */
 export const PUT = async ({ request, params }) => {
 	const body = await request.json();
 	const dico = await db.dicos.findOne({});

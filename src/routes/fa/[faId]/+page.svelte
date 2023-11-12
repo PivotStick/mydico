@@ -1,7 +1,7 @@
 <script>
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import QuickSelect from "$lib/components/QuickSelect.svelte";
+	import DicoSearcher from "$lib/components/DicoSearcher.svelte";
 	import { data } from "$lib/stores/data";
 	import { DateTime } from "luxon";
 	import { tick } from "svelte";
@@ -79,6 +79,11 @@
 			suppressMilliseconds: true
 		});
 	};
+
+	/**
+	 * @type {HTMLInputElement}
+	 */
+	let faInput;
 </script>
 
 <ul class="notes">
@@ -102,7 +107,8 @@
 		</li>
 	{/each}
 	<li class="notes__inputs">
-		<input type="text" bind:value={payload.name} on:keydown={keydown} />
+		<DicoSearcher bind:name={payload.name} bind:type={payload.type} input={faInput} />
+		<input type="text" bind:value={payload.name} bind:this={faInput} on:keydown={keydown} />
 		<select bind:value={payload.type}>
 			{#each types as type}
 				<option value={type}>{type}</option>
@@ -123,9 +129,7 @@
 <div class="actions">
 	<button on:click={setStart}>
 		<i class="fa fa-play" />
-		{DateTime.fromISO($data.values.fa[faIndex].start)
-			.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)
-			.slice(0, -3)}
+		{$data.values.fa[faIndex].start.replace(/T/, " ")}
 	</button>
 	<button on:click={setEnd}>
 		<i class="fa fa-pause" />
@@ -203,6 +207,7 @@
 		&__inputs {
 			display: flex;
 			border: 1px solid var(--color-200);
+			position: relative;
 
 			select,
 			input {

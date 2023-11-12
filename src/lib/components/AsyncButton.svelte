@@ -1,6 +1,7 @@
 <script>
 	import { scale } from "svelte/transition";
 	import { backIn, backOut } from "svelte/easing";
+	import { snacks } from "./Snacks.svelte";
 
 	/**
 	 * @type {() => Promise<any>}
@@ -12,9 +13,13 @@
 	const handle = async () => {
 		try {
 			loading = true;
-			await async();
+			const successMessage = await async();
+			if (typeof successMessage === "string") {
+				snacks.success(successMessage);
+			}
 		} catch (e) {
 			console.error(e);
+			snacks.error(e);
 		} finally {
 			loading = false;
 		}

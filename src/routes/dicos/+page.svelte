@@ -1,5 +1,10 @@
 <script>
+	import { goto } from "$app/navigation";
+	import { api } from "$lib/api";
+	import AsyncButton from "$lib/components/AsyncButton.svelte";
 	import Input from "$lib/components/Input.svelte";
+	import { snacks } from "$lib/components/Snacks.svelte";
+	import { formatNumber } from "$lib/functions/formatNumber";
 	import { data } from "$lib/stores/data";
 	import { v4 } from "uuid";
 
@@ -21,13 +26,24 @@
 
 		newName = "";
 	};
+
+	async function sync() {
+		const dicos = await api.get("/data/dicos");
+		$data.values.dicos = dicos;
+
+		return "Synchronisé ! 😎";
+	}
 </script>
 
 <div class="page">
+	<div class="actions">
+		<AsyncButton class="fa fa-sync" async={sync} />
+	</div>
+
 	<form on:submit|preventDefault={addDicoItem}>
 		<Input
 			label="Ajouter un dico"
-			placeholder="example: 'Dico de juin 2023...'"
+			placeholder="example: 'Dico de juin {new Date().getFullYear()}...'"
 			bind:value={newName}
 		/>
 		<button class="fa fa-plus fa-button" type="submit" />
@@ -36,15 +52,28 @@
 	{#if $data.values.dicos}
 		<ul class="dicos">
 			{#each $data.values.dicos as dico (dico.id)}
-				<li>
+				<li
+					on:click={() => {
+						goto(`/dicos/${dico.id}`);
+					}}
+				>
 					<i
-						class="fa fa-trash fa-button"
-						on:click={() => {
-							$data.values.dicos = $data.values.dicos.filter((d) => d.id !== dico.id);
+						class="fa fa-trash fa-button danger"
+						on:click|stopPropagation={() => {
+							if (confirm("Es-tu sûr ?")) {
+								$data.values.dicos = $data.values.dicos.filter((d) => d.id !== dico.id);
+								snacks.normal(
+									`Si tu veux sauvegarder ta suppression, fait "sauvegarder" dans la page des paramètres`,
+									"Hey!"
+								);
+							}
 						}}
 					/>
-					<a href="/dicos/{dico.id}" data-cover>{dico.name}</a>
-					<div class="items-count"><i class="fa fa-tv" /> {dico.items.length}</div>
+					<div class="name">{dico.name}</div>
+					<div class="items-count">
+						<i class="fa fa-tv" />
+						{formatNumber(dico.items.length)}
+					</div>
 				</li>
 			{/each}
 		</ul>
@@ -87,7 +116,7 @@
 					translate: 35% -35%;
 				}
 
-				a {
+				.name {
 					display: block;
 					font-size: 2rem;
 					font-weight: 700;
@@ -100,6 +129,10 @@
 					color: var(--on-color-200);
 				}
 			}
+		}
+
+		.actions {
+			margin-bottom: 1rem;
 		}
 	}
 </style>
