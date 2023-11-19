@@ -32,7 +32,6 @@
 	 * @param {KeyboardEvent} e
 	 */
 	const keydown = async (e) => {
-		const input = e.currentTarget;
 		switch (e.key) {
 			case "Enter": {
 				const name = payload.name.trim();
@@ -48,10 +47,7 @@
 				$data.values.fa[faIndex].notes = $data.values.fa[faIndex].notes;
 
 				await tick();
-
-				if (input instanceof HTMLInputElement) {
-					input.scrollIntoView({ block: "center", behavior: "smooth" });
-				}
+				faInput.focus();
 				break;
 			}
 
@@ -109,12 +105,12 @@
 	<li class="notes__inputs">
 		<DicoSearcher bind:name={payload.name} bind:type={payload.type} input={faInput} />
 		<input type="text" bind:value={payload.name} bind:this={faInput} on:keydown={keydown} />
-		<select bind:value={payload.type}>
+		<select bind:value={payload.type} on:keydown={keydown}>
 			{#each types as type}
 				<option value={type}>{type}</option>
 			{/each}
 		</select>
-		<select bind:value={payload.mode}>
+		<select bind:value={payload.mode} on:keydown={keydown}>
 			{#each modes as mode}
 				{#if mode}
 					<option value={mode}>{mode.name}</option>

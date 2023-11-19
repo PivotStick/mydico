@@ -1,5 +1,6 @@
 <script>
 	import { page } from "$app/stores";
+	import DicoSearcher from "$lib/components/DicoSearcher.svelte";
 	import Input from "$lib/components/Input.svelte";
 	import { data } from "$lib/stores/data";
 	import { tick } from "svelte";
@@ -16,6 +17,9 @@
 		const el = e.currentTarget;
 
 		switch (e.key) {
+			case "Tab": {
+				e.preventDefault();
+			}
 			case "Enter": {
 				const name = query.trim();
 
@@ -39,6 +43,11 @@
 				break;
 		}
 	};
+
+	/**
+	 * @type {HTMLInputElement}
+	 */
+	let input;
 </script>
 
 <ul class="items">
@@ -54,7 +63,14 @@
 		</li>
 	{/each}
 	<li class="items__inputs">
-		<input type="text" bind:value={query} on:keydown={keydown} />
+		<DicoSearcher bind:name={query} bind:input />
+		<input
+			type="text"
+			bind:this={input}
+			bind:value={query}
+			on:keydown={keydown}
+			placeholder="Écrit ici..."
+		/>
 	</li>
 </ul>
 
@@ -64,6 +80,7 @@
 		flex-direction: column;
 
 		padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+		min-height: 45vh;
 
 		&__item {
 			display: flex;
@@ -81,6 +98,7 @@
 
 		&__inputs {
 			display: flex;
+			position: relative;
 
 			input {
 				padding: 0.5rem;

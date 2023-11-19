@@ -2,7 +2,6 @@
 	import { api } from "$lib/api";
 	import AsyncButton from "$lib/components/AsyncButton.svelte";
 	import DicoSearcher from "$lib/components/DicoSearcher.svelte";
-	import { snacks } from "$lib/components/Snacks.svelte";
 	import { searchDicoItem } from "$lib/functions/searchDicoItem";
 	import { data } from "$lib/stores/data";
 	import { tick } from "svelte";
@@ -26,20 +25,18 @@
 	const keydown = async (e) => {
 		switch (e.key) {
 			case "Enter": {
+				payload.name = payload.name.trim();
+				if (!payload.name) return;
 				$data.values.posters.push({
 					id: v4(),
 					...payload
 				});
 
 				$data.values.posters = $data.values.posters;
-				const el = e.currentTarget;
 				payload.name = "";
 
-				if (el instanceof HTMLInputElement) {
-					await tick();
-
-					el.scrollIntoView({ behavior: "smooth", block: "center" });
-				}
+				await tick();
+				nameInput.focus();
 				break;
 			}
 
@@ -58,8 +55,6 @@
 	 * @type {HTMLInputElement}
 	 */
 	let nameInput;
-
-	$: searchResults = searchDicoItem(payload.name, $data.values.dicos);
 </script>
 
 <div class="actions">
@@ -98,13 +93,13 @@
 	<li class="posters__inputs">
 		<DicoSearcher bind:name={payload.name} input={nameInput} />
 
-		<input type="text" bind:this={nameInput} bind:value={payload.name} on:keydown={keydown} />
-		<select bind:value={payload.location}>
+		<input type="text" bind:this={nameInput} on:keydown={keydown} bind:value={payload.name} />
+		<select bind:value={payload.location} on:keydown={keydown}>
 			{#each locations as value}
 				<option>{value}</option>
 			{/each}
 		</select>
-		<select bind:value={payload.format}>
+		<select bind:value={payload.format} on:keydown={keydown}>
 			{#each formats as value}
 				<option>{value}</option>
 			{/each}
