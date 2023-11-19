@@ -23,7 +23,7 @@
 
 		if (!name) return;
 
-		$data.values.dicos[index].items.push({
+		$data.values.dicos[index].items.unshift({
 			id: v4(),
 			name,
 			type: "pub"
