@@ -17,7 +17,7 @@
 	 * @type {ReturnType<typeof searchDicoItem>}
 	 */
 	let searchResults = [];
-	let focused = false;
+	export let focused = false;
 	let listening = false;
 	let index = 0;
 
@@ -83,7 +83,10 @@
 		listening = true;
 	}
 
-	$: if (focused) searchResults = searchDicoItem(name, $data.values.dicos);
+	$: if (focused) {
+		searchResults = searchDicoItem(name, $data.values.dicos);
+		index = 0;
+	}
 
 	/**
 	 * @param {HTMLElement} node

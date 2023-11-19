@@ -80,9 +80,10 @@
 	 * @type {HTMLInputElement}
 	 */
 	let faInput;
+	let focused = false;
 </script>
 
-<ul class="notes">
+<ul class="notes" class:focused>
 	{#each $data.values.fa[faIndex].notes as note (note.id)}
 		<li class="notes__note" class:mode={note.mode}>
 			<input type="text" bind:value={note.name} />
@@ -103,7 +104,7 @@
 		</li>
 	{/each}
 	<li class="notes__inputs">
-		<DicoSearcher bind:name={payload.name} bind:type={payload.type} input={faInput} />
+		<DicoSearcher bind:focused bind:name={payload.name} bind:type={payload.type} input={faInput} />
 		<input type="text" bind:value={payload.name} bind:this={faInput} on:keydown={keydown} />
 		<select bind:value={payload.type} on:keydown={keydown}>
 			{#each types as type}
@@ -197,6 +198,12 @@
 			&.mode {
 				background-color: var(--color-200);
 				color: var(--on-color-200);
+			}
+		}
+
+		&.focused {
+			&.notes__inputs {
+				margin-top: 15rem;
 			}
 		}
 

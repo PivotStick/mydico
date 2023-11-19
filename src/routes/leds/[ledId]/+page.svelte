@@ -19,6 +19,7 @@
 		switch (e.key) {
 			case "Tab": {
 				e.preventDefault();
+				break;
 			}
 			case "Enter": {
 				const name = query.trim();
@@ -48,9 +49,10 @@
 	 * @type {HTMLInputElement}
 	 */
 	let input;
+	let focused = false;
 </script>
 
-<ul class="items">
+<ul class="items" class:focused>
 	{#each $data.values.leds[index].items as item (item.id)}
 		<li class="items__item">
 			<Input bind:value={item.name} />
@@ -63,7 +65,7 @@
 		</li>
 	{/each}
 	<li class="items__inputs">
-		<DicoSearcher bind:name={query} bind:input />
+		<DicoSearcher bind:focused bind:name={query} bind:input />
 		<input
 			type="text"
 			bind:this={input}
@@ -93,6 +95,12 @@
 			&:has(button:active) {
 				background-color: var(--danger-50);
 				color: var(--on-danger-50);
+			}
+		}
+
+		&.focused {
+			.items__inputs {
+				margin-top: 15rem;
 			}
 		}
 

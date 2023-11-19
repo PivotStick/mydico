@@ -55,6 +55,7 @@
 	 * @type {HTMLInputElement}
 	 */
 	let nameInput;
+	let focused = false;
 </script>
 
 <div class="actions">
@@ -68,7 +69,7 @@
 	</AsyncButton>
 </div>
 
-<ul class="posters">
+<ul class="posters" class:focused>
 	{#each $data.values.posters as poster (poster.id)}
 		<li class="posters__poster">
 			<input type="text" bind:value={poster.name} />
@@ -91,7 +92,7 @@
 		</li>
 	{/each}
 	<li class="posters__inputs">
-		<DicoSearcher bind:name={payload.name} input={nameInput} />
+		<DicoSearcher bind:focused bind:name={payload.name} input={nameInput} />
 
 		<input type="text" bind:this={nameInput} on:keydown={keydown} bind:value={payload.name} />
 		<select bind:value={payload.location} on:keydown={keydown}>
@@ -134,6 +135,12 @@
 			&:has(button:active) {
 				background-color: var(--danger-50);
 				color: var(--on-danger-50);
+			}
+		}
+
+		&.focused {
+			.posters__inputs {
+				margin-top: 15rem;
 			}
 		}
 
